@@ -21,9 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // Uploads directory ensure exists
-const uploadsDir = path.join(__dirname, 'uploads');
+const uploadsDir = process.env.VERCEL ? '/tmp/uploads' : path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)){
-    fs.mkdirSync(uploadsDir);
+    fs.mkdirSync(uploadsDir, { recursive: true });
 }
 // Serve static media files
 app.use('/uploads', express.static(uploadsDir));

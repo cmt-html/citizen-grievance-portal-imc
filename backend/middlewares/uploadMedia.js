@@ -4,7 +4,8 @@ const path = require('path');
 // Configure storage for local uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-      cb(null, 'uploads/');
+      const dir = process.env.VERCEL ? '/tmp/uploads' : 'uploads/';
+      cb(null, dir);
   },
   filename: function (req, file, cb) {
       const ext = path.extname(file.originalname);
