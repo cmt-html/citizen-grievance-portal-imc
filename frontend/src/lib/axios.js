@@ -3,7 +3,7 @@ import axios from 'axios';
 import setupMockAdapter from './mockApi';
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://citizen-grievance-backend.vercel.app/',
 });
 
 // Always mock for POC demonstration
