@@ -1,13 +1,8 @@
 import axios from 'axios';
 
-import setupMockAdapter from './mockApi';
-
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
 });
-
-// Always mock for POC demonstration
-setupMockAdapter(api);
 
 // Request interceptor to attach JWT token
 api.interceptors.request.use(
