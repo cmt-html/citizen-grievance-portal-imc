@@ -11,8 +11,8 @@ const complaintSchema = new mongoose.Schema({
         enum: ['Sanitation', 'Traffic', 'Police', 'Civic Infrastructure', 'Others']
     },
     media: {
-        image: { type: String, required: true }, // URL/path to image (mandatory)
-        video: { type: String } // URL/path to video (optional)
+        image: { type: String }, // URL/path to image (optional for POC)
+        video: { type: String }  // URL/path to video (optional)
     },
     location: {
         lat: { type: Number, required: true },

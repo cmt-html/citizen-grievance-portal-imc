@@ -3,6 +3,9 @@ const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
 const Complaint = require('../models/Complaint');
 const User = require('../models/User');
+const connectDB = require('../config/db');
+
+const ensureDB = async () => { await connectDB(); };
 
 const masterConfig = {
     categories: ['Sanitation', 'Traffic', 'Police', 'Civic Infrastructure', 'Others'],
@@ -14,11 +17,11 @@ const masterConfig = {
 // Simple dashboard metrics route
 router.get('/dashboard-metrics', authMiddleware(['department', 'admin']), async (req, res) => {
     try {
+        await ensureDB();
         const total = await Complaint.countDocuments();
         const pending = await Complaint.countDocuments({ status: { $in: ['Submitted', 'Assigned', 'In Progress'] } });
         const resolved = await Complaint.countDocuments({ status: 'Resolved' });
         
-        // Mock SLA check (complaints past deadline and not closed/resolved)
         const slaBreached = await Complaint.countDocuments({ 
             deadline: { $lt: new Date() },
             status: { $nin: ['Resolved', 'Closed'] }
@@ -36,6 +39,7 @@ router.get('/master-config', authMiddleware(['admin', 'department', 'councillor'
 
 router.post('/users', authMiddleware(['admin']), async (req, res) => {
     try {
+        await ensureDB();
         const { name, mobileNumber, email, role, departmentType, zone } = req.body;
         const user = new User({ name, mobileNumber, email, role, departmentType, zone });
         await user.save();
@@ -47,6 +51,7 @@ router.post('/users', authMiddleware(['admin']), async (req, res) => {
 
 router.get('/reports/summary', authMiddleware(['admin']), async (req, res) => {
     try {
+        await ensureDB();
         const complaints = await Complaint.find();
         const byDepartment = {};
         const byCategory = {};

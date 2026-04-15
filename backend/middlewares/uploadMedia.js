@@ -1,17 +1,8 @@
 const multer = require('multer');
-const path = require('path');
 
-// Configure storage for local uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      const dir = process.env.VERCEL ? '/tmp/uploads' : 'uploads/';
-      cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-      const ext = path.extname(file.originalname);
-      cb(null, `${file.fieldname}-${Date.now()}${ext}`);
-  }
-});
+// Use memory storage - works reliably on Vercel serverless (no ephemeral disk dependency)
+// Files will be in req.files[fieldname][0].buffer
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
     // Accept image and video
@@ -26,7 +17,7 @@ const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 1024 * 1024 * 50 // roughly 50MB limit
+        fileSize: 1024 * 1024 * 10 // 10MB limit (Vercel serverless memory constraint)
     }
 });
 

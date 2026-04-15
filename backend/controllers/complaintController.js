@@ -1,4 +1,8 @@
 const Complaint = require('../models/Complaint');
+const connectDB = require('../config/db');
+
+const ensureDB = async () => { await connectDB(); };
+
 
 const CATEGORY_DEPARTMENT_MAP = {
     Sanitation: 'Municipal Solid Waste',
@@ -47,16 +51,23 @@ const applyEscalationIfNeeded = (complaint) => {
 
 exports.createComplaint = async (req, res) => {
     try {
+        await ensureDB();
         const { title, description, category, lat, lng, address } = req.body;
         
-        if (!req.files || !req.files['image']) {
-            return res.status(400).json({ message: 'Image evidence is mandatory.' });
+        // Build media URLs from memory-stored buffer files (base64 data URI for POC)
+        let imageUrl = null;
+        let videoUrl = null;
+
+        if (req.files && req.files['image'] && req.files['image'][0]) {
+            const imgFile = req.files['image'][0];
+            const base64 = imgFile.buffer.toString('base64');
+            imageUrl = `data:${imgFile.mimetype};base64,${base64}`;
         }
 
-        const imageUrl = `/uploads/${req.files['image'][0].filename}`;
-        let videoUrl = null;
-        if (req.files['video']) {
-            videoUrl = `/uploads/${req.files['video'][0].filename}`;
+        if (req.files && req.files['video'] && req.files['video'][0]) {
+            const vidFile = req.files['video'][0];
+            const base64 = vidFile.buffer.toString('base64');
+            videoUrl = `data:${vidFile.mimetype};base64,${base64}`;
         }
 
         const numericLat = Number(lat);
@@ -93,6 +104,7 @@ exports.createComplaint = async (req, res) => {
 
 exports.getCitizenComplaints = async (req, res) => {
     try {
+        await ensureDB();
         const complaints = await Complaint.find({ user: req.user.userId }).sort({ createdAt: -1 });
         const updated = complaints.map((complaint) => applyEscalationIfNeeded(complaint));
         await Promise.all(updated.map((complaint) => complaint.save()));
@@ -104,6 +116,7 @@ exports.getCitizenComplaints = async (req, res) => {
 
 exports.getDepartmentComplaints = async (req, res) => {
     try {
+        await ensureDB();
         // Here we ideally filter by req.user.departmentType
         // For POC, we'll return all, or just let client filter
         const complaints = await Complaint.find().populate('user', 'name mobileNumber').sort({ createdAt: -1 });
