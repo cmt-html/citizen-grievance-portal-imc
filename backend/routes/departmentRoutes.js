@@ -15,7 +15,7 @@ const masterConfig = {
 };
 
 // Simple dashboard metrics route
-router.get('/dashboard-metrics', authMiddleware(['department', 'admin']), async (req, res) => {
+router.get('/dashboard-metrics', authMiddleware(['department', 'admin', 'councillor']), async (req, res) => {
     try {
         await ensureDB();
         const total = await Complaint.countDocuments();

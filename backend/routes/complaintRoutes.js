@@ -19,7 +19,7 @@ router.get('/all', authMiddleware(['department', 'admin', 'councillor']), compla
 
 router.put(
     '/:complaintId/status', 
-    authMiddleware(['department', 'admin']), 
+    authMiddleware(['department', 'admin', 'councillor']), 
     upload.fields([{ name: 'resolutionProof', maxCount: 1 }]), 
     complaintController.updateStatus
 );
