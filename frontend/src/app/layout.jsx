@@ -7,6 +7,14 @@ const outfit = Outfit({ subsets: ['latin'], weight: ['300', '400', '500', '600',
 export const metadata = {
   title: 'Citizen Grievance Portal',
   description: 'Submit and track civic issues effectively.',
+  icons: {
+    icon: [
+      { url: '/images/favicon/favicon-32x32.png', sizes: '32x32' },
+      { url: '/images/favicon/favicon-16x16.png', sizes: '16x16' },
+      { url: '/images/favicon/favicon.ico' },
+    ],
+    apple: '/images/favicon/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
