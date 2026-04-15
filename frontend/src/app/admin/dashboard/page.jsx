@@ -23,9 +23,9 @@ export default function AdminDashboard() {
         try {
             setLoading(true);
             const [metricsRes, complaintsRes, configRes] = await Promise.all([
-                api.get('/departments/dashboard-metrics'),
-                api.get('/complaints/all'),
-                api.get('/departments/master-config')
+                api.get('departments/dashboard-metrics'),
+                api.get('complaints/all'),
+                api.get('departments/master-config')
             ]);
             setMetrics(metricsRes.data);
             setComplaints(complaintsRes.data);

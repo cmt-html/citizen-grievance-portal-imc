@@ -158,8 +158,10 @@ exports.updateStatus = async (req, res) => {
             });
         }
 
-        if (req.files && req.files['resolutionProof']) {
-            complaint.resolutionProof = `/uploads/${req.files['resolutionProof'][0].filename}`;
+        if (req.files && req.files['resolutionProof'] && req.files['resolutionProof'][0]) {
+            const proofFile = req.files['resolutionProof'][0];
+            const base64 = proofFile.buffer.toString('base64');
+            complaint.resolutionProof = `data:${proofFile.mimetype};base64,${base64}`;
             complaint.status = 'Resolved';
         }
 

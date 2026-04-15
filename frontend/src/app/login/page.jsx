@@ -31,7 +31,7 @@ export default function Login() {
             return;
         }
         try {
-            const res = await api.post('/auth/send-otp', { mobileNumber, action: mode });
+            const res = await api.post('auth/send-otp', { mobileNumber, action: mode });
             setDemoOtp(res.data.demoOtp || '');
             setStep(2);
         } catch (err) {
@@ -53,8 +53,8 @@ export default function Login() {
 
         try {
             const res = mode === 'login'
-                ? await api.post('/auth/login', { mobileNumber, otp })
-                : await api.post('/auth/register', { mobileNumber, otp, ...profile });
+                ? await api.post('auth/login', { mobileNumber, otp })
+                : await api.post('auth/register', { mobileNumber, otp, ...profile });
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             

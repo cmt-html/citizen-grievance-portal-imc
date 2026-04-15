@@ -26,7 +26,7 @@ export default function DepartmentDashboard() {
     const fetchDashboard = async () => {
         try {
             setLoading(true);
-            const res = await api.get('/complaints/all');
+            const res = await api.get('complaints/all');
             setComplaints(res.data);
         } catch (error) {
             console.error('Fetch error:', error);
@@ -37,7 +37,7 @@ export default function DepartmentDashboard() {
 
     const updateStatus = async (id, status) => {
         try {
-            await api.put(`/complaints/${id}/status`, { status });
+            await api.put(`complaints/${id}/status`, { status });
             fetchDashboard();
         } catch (error) {
             alert('Failed to update status');
@@ -47,13 +47,14 @@ export default function DepartmentDashboard() {
     const submitResolution = async () => {
         if (!remarks) return alert('Remarks are mandatory.');
         try {
-            await api.put(`/complaints/${resolvingId}/status`, { status: 'Resolved', remarks });
+            await api.put(`complaints/${resolvingId}/status`, { status: 'Resolved', remarks });
             setResolvingId(null);
             setRemarks('');
             fetchDashboard();
             alert('Complaint marked as Resolved.');
         } catch(err) {
-            alert('Failed to resolve.');
+            const msg = err.response?.data?.message || 'Failed to resolve.';
+            alert(msg);
         }
     };
 

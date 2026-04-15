@@ -15,7 +15,7 @@ export default function AssignmentModal({ isOpen, onClose, complaint, onAssign }
         if (!isOpen) return;
         const fetchConfig = async () => {
             try {
-                const res = await api.get('/departments/master-config');
+                const res = await api.get('departments/master-config');
                 setConfig(res.data);
                 if (complaint) {
                     setFormData({
@@ -36,7 +36,7 @@ export default function AssignmentModal({ isOpen, onClose, complaint, onAssign }
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.put(`/complaints/${complaint.complaintId}/reassign`, formData);
+            await api.put(`complaints/${complaint.complaintId}/reassign`, formData);
             onAssign(complaint.complaintId, formData);
             onClose();
         } catch (err) {

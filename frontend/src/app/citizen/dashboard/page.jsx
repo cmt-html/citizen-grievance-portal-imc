@@ -13,7 +13,7 @@ export default function CitizenDashboard() {
         const fetchHistory = async () => {
             const localComplaints = JSON.parse(localStorage.getItem('demoComplaints') || '[]');
             try {
-                const res = await api.get('/complaints/my-history');
+                const res = await api.get('complaints/my-history');
                 setComplaints(res.data);
             } catch (err) {
                 if (err.response?.status === 401) {
@@ -28,8 +28,8 @@ export default function CitizenDashboard() {
 
     const submitFeedback = async (complaintId, decision) => {
         try {
-            await api.put(`/complaints/${complaintId}/feedback`, { decision });
-            const res = await api.get('/complaints/my-history');
+            await api.put(`complaints/${complaintId}/feedback`, { decision });
+            const res = await api.get('complaints/my-history');
             setComplaints(res.data);
         } catch (error) {
             alert(error.response?.data?.message || 'Unable to submit feedback');

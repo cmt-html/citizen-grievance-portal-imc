@@ -92,7 +92,7 @@ export default function NewComplaint() {
         if (video) data.append('video', video);
 
         try {
-            await api.post('/complaints', data, {
+            await api.post('complaints', data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             router.push('/citizen/dashboard');
