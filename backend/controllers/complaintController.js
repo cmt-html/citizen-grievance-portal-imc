@@ -13,9 +13,9 @@ const CATEGORY_DEPARTMENT_MAP = {
 };
 
 const ZONE_COUNCILLOR_MAP = [
-    { zone: 'North Zone', minLat: 20.1, maxLat: 20.3, councillor: 'Councillor - North Ward' },
-    { zone: 'Central Zone', minLat: 20.3, maxLat: 20.45, councillor: 'Councillor - Central Ward' },
-    { zone: 'South Zone', minLat: 20.45, maxLat: 20.8, councillor: 'Councillor - South Ward' }
+    { zone: 'North Zone (Vijay Nagar)', minLat: 22.73, maxLat: 22.85, councillor: 'Councillor - North Ward' },
+    { zone: 'Central Zone (Rajwada)', minLat: 22.70, maxLat: 22.73, councillor: 'Councillor - Central Ward' },
+    { zone: 'South Zone (Bhawarkua)', minLat: 22.60, maxLat: 22.70, councillor: 'Councillor - South Ward' }
 ];
 
 const ESCALATION_LABELS = {

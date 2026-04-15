@@ -17,27 +17,61 @@ export default function NewComplaint() {
     const [video, setVideo] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    const INDORE_SPOTS = [
+        { name: 'Rajwada, Indore', lat: 22.7196, lng: 75.8577 },
+        { name: 'Vijay Nagar, Indore', lat: 22.7533, lng: 75.8937 },
+        { name: 'Palasia, Indore', lat: 22.7237, lng: 75.8824 },
+        { name: 'Bhawarkua, Indore', lat: 22.6916, lng: 75.8676 },
+        { name: 'Sudama Nagar, Indore', lat: 22.6986, lng: 75.8322 }
+    ];
+
     const handleLocation = () => {
         if ("geolocation" in navigator) {
             setLoading(true);
             navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    // Simulated reverse geocoding for POC (Indore areas)
-                    setTimeout(() => {
-                        const areas = ["Vijay Nagar, Indore", "Palasia, Indore", "Rajwada, Indore", "Bhawarkua, Indore", "Sudama Nagar, Indore"];
-                        const randomArea = areas[Math.floor(Math.random() * areas.length)];
-                        
+                async (position) => {
+                    let { latitude, longitude } = position.coords;
+                    
+                    // POC Check: If outside Indore bounds, snap to a real Indore spot for testing
+                    // Indore range approx: Lat 22.5 to 23.0, Lng 75.6 to 76.1
+                    const isInIndore = latitude > 22.5 && latitude < 23.0 && longitude > 75.6 && longitude < 76.1;
+                    
+                    if (!isInIndore) {
+                        const spot = INDORE_SPOTS[Math.floor(Math.random() * INDORE_SPOTS.length)];
+                        latitude = spot.lat;
+                        longitude = spot.lng;
+                        console.log("📍 Outside Indore. Snapping to test spot:", spot.name);
+                    }
+
+                    try {
+                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
+                        const data = await response.json();
+                        const realAddress = data.display_name || "Indore, Madhya Pradesh";
+                        // Clean up address (take first few parts)
+                        const shortAddress = realAddress.split(',').slice(0, 3).join(',') + ", Indore";
+
                         setFormData(prev => ({
                             ...prev, 
-                            lat: position.coords.latitude, 
-                            lng: position.coords.longitude,
-                            address: randomArea
+                            lat: latitude, 
+                            lng: longitude,
+                            address: shortAddress
                         }));
+                    } catch (err) {
+                        // Fallback if API fails
+                        setFormData(prev => ({
+                            ...prev, 
+                            lat: latitude, 
+                            lng: longitude,
+                            address: "Indore (GPS Location)"
+                        }));
+                    } finally {
                         setLoading(false);
-                    }, 800);
+                    }
                 },
                 (error) => {
-                    alert("Please allow location access to auto-fill GPS coordinates.");
+                    alert("Please allow location access. Using a default Indore location for POC.");
+                    const spot = INDORE_SPOTS[0];
+                    setFormData(prev => ({ ...prev, lat: spot.lat, lng: spot.lng, address: spot.name }));
                     setLoading(false);
                 }
             );
