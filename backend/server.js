@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-// CORS — allow the frontend Vercel domain and localhost for dev
+// CORS — allow all Vercel preview deployments + production + localhost
 const allowedOrigins = [
     'https://citizen-grievance-portal-imc.vercel.app',
     'http://localhost:3000',
@@ -18,8 +18,10 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow requests with no origin (e.g. curl, Postman, mobile apps)
+        // Allow requests with no origin (curl, Postman, mobile apps)
         if (!origin) return callback(null, true);
+        // Allow all *.vercel.app subdomains (preview deployments)
+        if (origin.endsWith('.vercel.app')) return callback(null, true);
         if (allowedOrigins.includes(origin)) return callback(null, true);
         return callback(new Error(`CORS policy blocked origin: ${origin}`), false);
     },
@@ -30,13 +32,17 @@ app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 app.use(morgan('dev'));
 
-// Health probe (useful for debugging Vercel deployments)
+// Health probe — shows env var status for debugging Vercel deployments
 app.get('/api/health', async (req, res) => {
+    const envStatus = {
+        MONGODB_URI: process.env.MONGODB_URI ? '✅ set' : '❌ MISSING',
+        JWT_SECRET: process.env.JWT_SECRET ? '✅ set' : '❌ MISSING',
+    };
     try {
         await connectDB();
-        res.json({ status: 'ok', db: 'connected', timestamp: new Date().toISOString() });
+        res.json({ status: 'ok', db: 'connected', env: envStatus, timestamp: new Date().toISOString() });
     } catch (err) {
-        res.status(500).json({ status: 'error', db: 'disconnected', error: err.message });
+        res.status(500).json({ status: 'error', db: 'disconnected', env: envStatus, error: err.message });
     }
 });
 

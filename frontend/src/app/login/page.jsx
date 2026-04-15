@@ -49,23 +49,7 @@ export default function Login() {
             return;
         }
 
-        // Always allow a fake OTP flow for demo purpose.
-        if (otp === DEMO_OTP) {
-            const demoRole = mode === 'register' ? profile.role : 'citizen';
-            const demoUser = {
-                _id: `demo-${mobileNumber}`,
-                name: profile.name || 'Demo Citizen',
-                mobileNumber,
-                role: demoRole
-            };
-            localStorage.setItem('token', 'demo-token');
-            localStorage.setItem('user', JSON.stringify(demoUser));
-
-            if (demoRole === 'citizen') router.push('/citizen/dashboard');
-            else if (demoRole === 'admin') router.push('/admin/dashboard');
-            else router.push('/department/dashboard');
-            return;
-        }
+        // Removed demo-token bypass to ensure production-ready auth flow with real backend JWTs.
 
         try {
             const res = mode === 'login'

@@ -72,6 +72,11 @@ exports.createComplaint = async (req, res) => {
 
         const numericLat = Number(lat);
         const numericLng = Number(lng);
+
+        if (isNaN(numericLat) || isNaN(numericLng)) {
+            return res.status(400).json({ message: 'Invalid GPS coordinates provided.' });
+        }
+
         const assignedToDepartment = CATEGORY_DEPARTMENT_MAP[category] || CATEGORY_DEPARTMENT_MAP.Others;
         const { zone, councillor } = deriveZoneAndCouncillor(numericLat);
 
@@ -96,9 +101,18 @@ exports.createComplaint = async (req, res) => {
         });
 
         await complaint.save();
-        res.status(201).json({ message: 'Complaint registered successfully', complaintId: complaint.complaintId });
+        console.log(`✅ Complaint created: ${complaint.complaintId}`);
+        res.status(201).json({ 
+            message: 'Complaint registered successfully', 
+            complaintId: complaint.complaintId,
+            status: complaint.status 
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('❌ Create Complaint Error:', error);
+        res.status(500).json({ 
+            message: 'Internal server error while saving complaint', 
+            error: error.message 
+        });
     }
 };
 
