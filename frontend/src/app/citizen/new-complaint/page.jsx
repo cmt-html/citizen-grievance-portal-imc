@@ -30,21 +30,22 @@ export default function NewComplaint() {
             setLoading(true);
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
-                    let { latitude, longitude } = position.coords;
+                    let finalLat = position.coords.latitude;
+                    let finalLng = position.coords.longitude;
                     
                     // POC Check: If outside Indore bounds, snap to a real Indore spot for testing
                     // Indore range approx: Lat 22.5 to 23.0, Lng 75.6 to 76.1
-                    const isInIndore = latitude > 22.5 && latitude < 23.0 && longitude > 75.6 && longitude < 76.1;
+                    const isInIndore = finalLat > 22.5 && finalLat < 23.0 && finalLng > 75.6 && finalLng < 76.1;
                     
                     if (!isInIndore) {
                         const spot = INDORE_SPOTS[Math.floor(Math.random() * INDORE_SPOTS.length)];
-                        latitude = spot.lat;
-                        longitude = spot.lng;
+                        finalLat = spot.lat;
+                        finalLng = spot.lng;
                         console.log("📍 Outside Indore. Snapping to test spot:", spot.name);
                     }
 
                     try {
-                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
+                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${finalLat}&lon=${finalLng}`);
                         const data = await response.json();
                         const realAddress = data.display_name || "Indore, Madhya Pradesh";
                         // Clean up address (take first few parts)
@@ -52,16 +53,16 @@ export default function NewComplaint() {
 
                         setFormData(prev => ({
                             ...prev, 
-                            lat: latitude, 
-                            lng: longitude,
+                            lat: finalLat, 
+                            lng: finalLng,
                             address: shortAddress
                         }));
                     } catch (err) {
                         // Fallback if API fails
                         setFormData(prev => ({
                             ...prev, 
-                            lat: latitude, 
-                            lng: longitude,
+                            lat: finalLat, 
+                            lng: finalLng,
                             address: "Indore (GPS Location)"
                         }));
                     } finally {
