@@ -3,8 +3,17 @@ import { useEffect, useState } from 'react';
 import api from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import AuthGuard from '@/components/AuthGuard';
 
 export default function CitizenDashboard() {
+    return (
+        <AuthGuard roles={['citizen']}>
+            <CitizenDashboardContent />
+        </AuthGuard>
+    );
+}
+
+function CitizenDashboardContent() {
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();

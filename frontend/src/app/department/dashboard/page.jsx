@@ -2,10 +2,19 @@
 import { useEffect, useState } from 'react';
 import api from '@/lib/axios';
 import AssignmentModal from '@/components/AssignmentModal';
+import AuthGuard from '@/components/AuthGuard';
 
 const STATUS_STEPS = ['Submitted', 'Assigned', 'In Progress', 'Resolved', 'Closed'];
 
 export default function DepartmentDashboard() {
+    return (
+        <AuthGuard roles={['department', 'admin']}>
+            <DepartmentDashboardContent />
+        </AuthGuard>
+    );
+}
+
+function DepartmentDashboardContent() {
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState({ category: 'All', status: 'All' });

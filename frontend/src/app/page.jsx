@@ -1,6 +1,25 @@
+'use client';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  // Determine dashboard link based on role
+  const getDashboardLink = () => {
+    if (!user) return '/login';
+    if (user.role === 'admin') return '/admin/dashboard';
+    if (user.role === 'department') return '/department/dashboard';
+    return '/citizen/dashboard';
+  };
+
   return (
     <div className="hero-gradient flex-1 flex flex-col justify-center py-16 px-4 md:px-8 relative overflow-hidden">
       {/* Abstract background decorative blobs */}
@@ -17,18 +36,29 @@ export default function Home() {
             Report civic issues seamlessly with AI-verified geo-tagging. Track resolutions in real-time, backed by a strict 48-hour municipal SLA.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-            <Link href="/citizen/new-complaint" className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300 font-semibold text-lg border border-transparent">
-              Raise a Complaint
-            </Link>
-            <Link href="/login" className="w-full sm:w-auto px-8 py-3.5 bg-white/80 backdrop-blur-md text-slate-800 border border-slate-200/50 rounded-full shadow-sm hover:bg-white hover:-translate-y-1 transition-all duration-300 font-semibold text-lg">
-              Citizen Login
-            </Link>
+            {user ? (
+               <Link href={getDashboardLink()} className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300 font-semibold text-lg border border-transparent">
+               Go to My Dashboard
+             </Link>
+            ) : (
+              <>
+                <Link href="/citizen/new-complaint" className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300 font-semibold text-lg border border-transparent">
+                  Raise a Complaint
+                </Link>
+                <Link href="/login" className="w-full sm:w-auto px-8 py-3.5 bg-white/80 backdrop-blur-md text-slate-800 border border-slate-200/50 rounded-full shadow-sm hover:bg-white hover:-translate-y-1 transition-all duration-300 font-semibold text-lg">
+                  Citizen Login
+                </Link>
+              </>
+            )}
           </div>
-          <div className="mt-6">
-             <Link href="/admin/dashboard" className="text-sm font-medium text-slate-500 hover:text-indigo-600 transition underline underline-offset-4 decoration-slate-300 hover:decoration-indigo-600">
-              Department / Admin Access
-            </Link>
-          </div>
+          
+          {!user && (
+            <div className="mt-6">
+              <Link href="/login" className="text-sm font-medium text-slate-500 hover:text-indigo-600 transition underline underline-offset-4 decoration-slate-300 hover:decoration-indigo-600">
+                Department / Admin Access
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 text-left">

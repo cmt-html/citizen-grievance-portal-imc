@@ -12,10 +12,16 @@ export default function Navbar() {
     const pathname = usePathname();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        const checkUser = () => {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            } else {
+                setUser(null);
+            }
+        };
+
+        checkUser();
     }, [pathname]);
 
     // Close menu when route changes automatically

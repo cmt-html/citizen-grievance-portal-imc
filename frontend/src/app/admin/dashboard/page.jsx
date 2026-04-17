@@ -2,10 +2,19 @@
 import { useEffect, useState } from 'react';
 import api from '@/lib/axios';
 import AssignmentModal from '@/components/AssignmentModal';
+import AuthGuard from '@/components/AuthGuard';
 
 const STATUS_STEPS = ['Submitted', 'Assigned', 'In Progress', 'Resolved', 'Closed'];
 
 export default function AdminDashboard() {
+    return (
+        <AuthGuard roles={['admin']}>
+            <AdminDashboardContent />
+        </AuthGuard>
+    );
+}
+
+function AdminDashboardContent() {
     const [complaints, setComplaints] = useState([]);
     const [metrics, setMetrics] = useState({
         total: 0, pending: 0, resolved: 0, slaBreached: 0

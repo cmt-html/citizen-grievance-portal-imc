@@ -2,8 +2,17 @@
 import { useState } from 'react';
 import api from '@/lib/axios';
 import { useRouter } from 'next/navigation';
+import AuthGuard from '@/components/AuthGuard';
 
 export default function NewComplaint() {
+    return (
+        <AuthGuard roles={['citizen']}>
+            <NewComplaintContent />
+        </AuthGuard>
+    );
+}
+
+function NewComplaintContent() {
     const router = useRouter();
     const [formData, setFormData] = useState({
         title: '',
