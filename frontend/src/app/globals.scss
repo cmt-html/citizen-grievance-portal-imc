@@ -126,10 +126,7 @@
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.panel:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
-}
+/* .panel:hover removed */
 
 .soft-badge {
   display: inline-flex;
@@ -162,9 +159,7 @@
   transition: transform 0.2s ease;
 }
 
-.metric-card:hover {
-  transform: scale(1.02);
-}
+/* .metric-card:hover removed */
 
 .metric-title {
   font-size: 0.78rem;

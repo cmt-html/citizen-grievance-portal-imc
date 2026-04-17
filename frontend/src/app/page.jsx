@@ -62,17 +62,17 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 text-left">
-          <div className="panel p-6 bg-white/60 hover:bg-white transition-colors duration-300">
+          <div className="panel p-6 bg-white/60 transition-colors duration-300">
             <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-5 shadow-sm text-2xl">📸</div>
             <p className="text-lg text-slate-800 font-bold mb-2">Smart Geo-tagging</p>
             <p className="text-sm text-slate-600 leading-relaxed">Instant upload interface for image/video evidence, automatically synchronized with high-precision GPS coordinates.</p>
           </div>
-          <div className="panel p-6 bg-white/60 hover:bg-white transition-colors duration-300 border-t-4 border-t-indigo-500">
+          <div className="panel p-6 bg-white/60 transition-colors duration-300 border-t-4 border-t-indigo-500">
             <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center mb-5 shadow-sm text-2xl">⚡</div>
             <p className="text-lg text-slate-800 font-bold mb-2">48-Hr Guaranteed SLA</p>
             <p className="text-sm text-slate-600 leading-relaxed">Automated routing to local wards ensuring critical issues are immediately assigned. Escapes to higher authorities post 48 hours.</p>
           </div>
-          <div className="panel p-6 bg-white/60 hover:bg-white transition-colors duration-300">
+          <div className="panel p-6 bg-white/60 transition-colors duration-300">
             <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-5 shadow-sm text-2xl">🤝</div>
             <p className="text-lg text-slate-800 font-bold mb-2">Transparent Feedback</p>
             <p className="text-sm text-slate-600 leading-relaxed">Citizens retain final closure rights. Reject incomplete resolutions directly from your dashboard forcing case re-evaluations.</p>

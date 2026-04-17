@@ -126,7 +126,7 @@ function DepartmentDashboardContent() {
                     ) : visibleComplaints.length === 0 ? (
                         <div className="panel p-20 text-center text-slate-400">No active tickets matching the selected criteria.</div>
                     ) : visibleComplaints.map((c) => (
-                        <div key={c._id} className="panel overflow-hidden border-l-4 border-l-blue-500 shadow-xl hover:shadow-blue-500/10 transition-all duration-300">
+                        <div key={c._id} className="panel overflow-hidden border-l-4 border-l-blue-500 shadow-xl transition-all duration-300">
                             {/* Pipeline Header */}
                             <div className="bg-slate-50/50 border-bottom px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
                                 <div className="flex items-center gap-2">

@@ -82,7 +82,7 @@ function CitizenDashboardContent() {
                 ) : (
                     <div className="grid gap-4 md:gap-6">
                         {complaints.map(c => (
-                            <div key={c._id} className="panel p-5 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center hover:shadow-md transition gap-4 md:gap-0">
+                            <div key={c._id} className="panel p-5 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center transition gap-4 md:gap-0">
                                 <div>
                                     <div className="text-xs text-slate-500 mb-1">{new Date(c.createdAt).toLocaleDateString()} • {c.complaintId}</div>
                                     <h3 className="text-lg md:text-xl font-semibold text-slate-800">{c.title}</h3>
